@@ -3,8 +3,8 @@ if not x then
 	x = v
 end
 
--- a?b:c
-(a and b or c)
+-- a ? b : c
+local result = a and b or c
 
 -- max between two numbers
-(x > y) and x or y
+local max = (x > y) and x or y
