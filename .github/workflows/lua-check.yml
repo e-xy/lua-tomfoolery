@@ -1,0 +1,32 @@
+name: Lua Syntax Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Install Lua
+        run: sudo apt-get update && sudo apt-get install -y lua5.4
+
+      - name: Check all Lua files
+        run: |
+          set -euo pipefail
+
+          mapfile -d '' lua_files < <(find . -name "*.lua" -print0)
+
+          if [ ${#lua_files[@]} -eq 0 ]; then
+            echo "No Lua files found."
+            exit 0
+          fi
+
+          for file in "${lua_files[@]}"; do
+            echo "Checking $file"
+            luac5.4 -p "$file"
+          done
